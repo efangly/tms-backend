@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  title: TMS API
+  description: เอกสารการเชื่อมต่อ API ของระบบ TMS
+  version: 0.1.9
+servers:
+  - url: https://api.siamatic.co.th/tms
+tags:
+  - name: TempLog
+    description: Temperature log operations
+paths:
+  /templog:
+    get:
+      tags:
+        - TempLog
+      summary: แสดงรายการ Templog
+      responses:
+        '200':
+          description: A list of temperature logs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TempLog'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - TempLog
+      summary: สร้างรายการ Templog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TempLog'
+      responses:
+        '201':
+          description: Temperature log created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successful
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/TempLog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    TempLog:
+      type: object
+      properties:
+        mcuId:
+          type: string
+          example: 'A'
+        status:
+          type: string
+          format: date-time
+          example: '000000001'
+        tempValue:
+          type: string
+          example: '25.5'
+        realValue:
+          type: string
+          example: '25.5'
+        date:
+          type: string
+          format: date-time
+          example: '2023-10-01'
+        time:
+          type: string
+          format: date-time
+          example: '12:00'
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        success:
+          type: boolean
+        data:
+          type: null
